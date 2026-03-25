@@ -1,5 +1,6 @@
 "use client"
 
+import { useMemo } from "react"
 import { TreePine, Clock, Trophy, Lock, ChevronRight, Flame } from "lucide-react"
 import { BottomNav } from "./bottom-nav"
 
@@ -8,6 +9,15 @@ interface ForestScreenProps {
 }
 
 export function ForestScreen({ onTabChange }: ForestScreenProps) {
+  // Stable sparkle positions (no Math.random() in render)
+  const sparkles = useMemo(() => 
+    [...Array(8)].map((_, i) => ({
+      left: `${10 + (i * 11.3) % 80}%`,
+      top: `${10 + (i * 7.7) % 60}%`,
+      delay: `${(i * 0.3) % 2}s`,
+    })), []
+  )
+
   // Tree data with varying sizes and colors
   const trees = [
     { size: "lg", color: "#22C55E", delay: 0 },
@@ -68,15 +78,11 @@ export function ForestScreen({ onTabChange }: ForestScreenProps) {
           {/* Forest Canvas */}
           <div className="relative h-64 rounded-2xl bg-gradient-to-b from-emerald-950/40 to-black overflow-hidden mb-6">
             {/* Sparkles */}
-            {[...Array(8)].map((_, i) => (
+            {sparkles.map((s, i) => (
               <div
                 key={i}
                 className="absolute w-1 h-1 bg-white/30 rounded-full animate-pulse"
-                style={{
-                  left: `${10 + Math.random() * 80}%`,
-                  top: `${10 + Math.random() * 60}%`,
-                  animationDelay: `${Math.random() * 2}s`,
-                }}
+                style={{ left: s.left, top: s.top, animationDelay: s.delay }}
               />
             ))}
             

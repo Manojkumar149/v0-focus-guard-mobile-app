@@ -112,9 +112,9 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
 
   return (
     <div className="min-h-screen bg-background flex justify-center">
-      <div className="w-full max-w-[375px] min-h-screen bg-background relative flex flex-col">
-        {/* Header */}
-        <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-xl border-b border-border/50 px-4 py-3">
+      <div className="w-full max-w-[375px] h-screen bg-background flex flex-col">
+        {/* Header - sticky top */}
+        <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-xl border-b border-border/50 px-4 py-3 shrink-0">
           <div className="flex items-center justify-between">
             <button
               onClick={onBack || (() => onTabChange?.("home"))}
@@ -137,8 +137,8 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
           </div>
         </header>
 
-        {/* Chat Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-6 pb-44">
+        {/* Chat Messages - scrollable flex-1 */}
+        <div className="flex-1 overflow-y-auto px-4 py-6">
           {messages.map((message) => (
             <div
               key={message.id}
@@ -164,7 +164,7 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
                 ) : message.isStatsCard ? (
                   <div className="ml-10">
                     <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-                      <h4 className="text-sm font-semibold text-white mb-3">Your Weekly Insights 📊</h4>
+                      <h4 className="text-sm font-semibold text-white mb-3">Your Weekly Insights</h4>
                       <div className="space-y-2.5">
                         <div className="flex items-center gap-3">
                           <Flame className="w-4 h-4 text-orange-400" />
@@ -207,9 +207,10 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Quick Reply Chips */}
-        <div className="absolute bottom-36 left-0 right-0 max-w-[375px] mx-auto px-4">
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        {/* Quick replies + input - sticky above bottom nav */}
+        <div className="shrink-0 pb-20 px-4 bg-background/80 backdrop-blur-xl border-t border-border/50">
+          {/* Quick reply chips */}
+          <div className="flex gap-2 overflow-x-auto py-3 scrollbar-hide">
             {quickReplies.map((reply, i) => (
               <button
                 key={i}
@@ -220,12 +221,10 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
               </button>
             ))}
           </div>
-        </div>
-
-        {/* Input Bar */}
-        <div className="absolute bottom-16 left-0 right-0 max-w-[375px] mx-auto bg-card/80 backdrop-blur-xl border-t border-border/50 px-4 py-3">
-          <div className="flex items-center gap-3">
-            <button className="w-10 h-10 rounded-full hover:bg-white/5 flex items-center justify-center transition-colors">
+          
+          {/* Input bar */}
+          <div className="flex items-center gap-3 pb-2">
+            <button className="w-10 h-10 rounded-full hover:bg-white/5 flex items-center justify-center transition-colors shrink-0">
               <Mic className="w-5 h-5 text-white/40" />
             </button>
             
@@ -243,7 +242,7 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
             <button
               onClick={handleSend}
               disabled={!inputText.trim()}
-              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 ${
                 inputText.trim()
                   ? "bg-primary text-white shadow-[0_0_20px_rgba(79,70,229,0.4)]"
                   : "bg-white/5 text-white/30"
