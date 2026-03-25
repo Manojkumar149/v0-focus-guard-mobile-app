@@ -1,22 +1,28 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
-import { X, Pause, Play, TreeDeciduous } from "lucide-react"
+import { X, Pause, Play, TreeDeciduous, Settings, Plus, Clock, Zap, Users } from "lucide-react"
 
 interface FocusTimerScreenProps {
   initialMinutes?: number
+  sessionName?: string
+  sessionNumber?: number
+  totalSessions?: number
   onClose: () => void
   onComplete?: () => void
 }
 
 export function FocusTimerScreen({ 
   initialMinutes = 25, 
+  sessionName = "DSA Practice",
+  sessionNumber = 2,
+  totalSessions = 3,
   onClose, 
   onComplete 
 }: FocusTimerScreenProps) {
   const [totalSeconds, setTotalSeconds] = useState(initialMinutes * 60)
   const [isRunning, setIsRunning] = useState(true)
-  const [isPulsing, setIsPulsing] = useState(true)
+  const [earnedXP, setEarnedXP] = useState(0)
   
   const initialTotalSeconds = initialMinutes * 60
   const progress = ((initialTotalSeconds - totalSeconds) / initialTotalSeconds) * 100
@@ -25,6 +31,11 @@ export function FocusTimerScreen({
 
   const minutes = Math.floor(totalSeconds / 60)
   const seconds = totalSeconds % 60
+
+  // Calculate focused time today (mock: 1h 25m + current session progress)
+  const focusedToday = Math.floor((initialTotalSeconds - totalSeconds) / 60) + 85 // 85 min from previous sessions
+  const focusedHours = Math.floor(focusedToday / 60)
+  const focusedMins = focusedToday % 60
 
   useEffect(() => {
     if (!isRunning || totalSeconds <= 0) {
@@ -36,6 +47,8 @@ export function FocusTimerScreen({
 
     const interval = setInterval(() => {
       setTotalSeconds((prev) => prev - 1)
+      // Earn XP over time
+      setEarnedXP((prev) => Math.min(prev + 0.05, 150))
     }, 1000)
 
     return () => clearInterval(interval)
@@ -43,7 +56,10 @@ export function FocusTimerScreen({
 
   const togglePause = useCallback(() => {
     setIsRunning((prev) => !prev)
-    setIsPulsing((prev) => !prev)
+  }, [])
+
+  const addFiveMinutes = useCallback(() => {
+    setTotalSeconds((prev) => prev + 300)
   }, [])
 
   const formatTime = (mins: number, secs: number) => {
@@ -51,46 +67,80 @@ export function FocusTimerScreen({
   }
 
   return (
-    <div className="fixed inset-0 bg-black flex flex-col items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black flex flex-col items-center z-50 overflow-hidden">
+      {/* Subtle radial gradient background */}
+      <div className="absolute inset-0 bg-gradient-radial from-indigo-950/20 via-black to-black pointer-events-none" />
+      
       {/* Ambient glow layers */}
       <div 
-        className={`absolute w-96 h-96 rounded-full bg-primary/10 blur-[100px] transition-opacity duration-1000 ${
-          isPulsing ? "animate-pulse" : "opacity-30"
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-primary/10 blur-[100px] transition-opacity duration-1000 ${
+          isRunning ? "animate-pulse opacity-100" : "opacity-30"
         }`} 
       />
       <div 
-        className={`absolute w-72 h-72 rounded-full bg-primary/20 blur-[60px] transition-opacity duration-1000 ${
-          isPulsing ? "animate-pulse" : "opacity-20"
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-primary/20 blur-[60px] transition-opacity duration-1000 ${
+          isRunning ? "animate-pulse opacity-100" : "opacity-20"
         }`} 
         style={{ animationDelay: "0.5s" }}
       />
       
-      {/* Close button */}
-      <button
-        onClick={onClose}
-        className="absolute top-6 right-6 p-3 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
-        aria-label="Close timer"
-      >
-        <X className="w-6 h-6 text-white/60" />
-      </button>
-
-      {/* Growing tree indicator */}
-      <div className="flex items-center gap-2 mb-8 text-emerald-400/80">
-        <TreeDeciduous className="w-5 h-5" />
-        <span className="text-sm font-medium tracking-wide">Growing your tree...</span>
+      {/* Top Bar */}
+      <div className="relative w-full max-w-[375px] flex items-center justify-between px-5 pt-6">
+        <button
+          onClick={onClose}
+          className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 transition-colors flex items-center justify-center"
+          aria-label="Close timer"
+        >
+          <X className="w-5 h-5 text-white/60" />
+        </button>
+        
+        <span className="text-white/40 text-sm">
+          Session {sessionNumber} of {totalSessions} today
+        </span>
+        
+        <button
+          className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 transition-colors flex items-center justify-center"
+          aria-label="Settings"
+        >
+          <Settings className="w-5 h-5 text-white/60" />
+        </button>
       </div>
 
-      {/* Timer ring */}
-      <div className="relative flex items-center justify-center">
+      {/* Session Name & Status */}
+      <div className="relative flex flex-col items-center mt-6">
+        <h2 className="text-xl font-medium text-white tracking-tight">{sessionName}</h2>
+        <div className="flex items-center gap-2 mt-3">
+          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+            isRunning 
+              ? "bg-primary/20 text-indigo-300" 
+              : "bg-white/10 text-white/60"
+          }`}>
+            {isRunning ? "Focus Mode" : "Paused"}
+          </span>
+        </div>
+        
+        {/* Growing tree indicator */}
+        <div className={`flex items-center gap-2 mt-4 transition-opacity duration-300 ${
+          isRunning ? "opacity-100" : "opacity-50"
+        }`}>
+          <TreeDeciduous className="w-4 h-4 text-emerald-400" />
+          <span className="text-sm text-emerald-400/80 font-medium">
+            {isRunning ? "Growing your tree..." : "Tree growth paused"}
+          </span>
+        </div>
+      </div>
+
+      {/* Main Timer Ring */}
+      <div className="relative flex items-center justify-center flex-1">
         {/* Pulsing outer glow */}
         <div 
-          className={`absolute inset-0 rounded-full transition-all duration-1000 ${
-            isPulsing 
+          className={`absolute w-80 h-80 rounded-full transition-all duration-1000 ${
+            isRunning 
               ? "shadow-[0_0_60px_20px_rgba(79,70,229,0.3),0_0_120px_40px_rgba(79,70,229,0.15)]" 
-              : "shadow-[0_0_30px_10px_rgba(79,70,229,0.15)]"
+              : "shadow-[0_0_30px_10px_rgba(79,70,229,0.1)]"
           }`}
           style={{
-            animation: isPulsing ? "timerPulse 2s ease-in-out infinite" : "none"
+            animation: isRunning ? "timerPulse 2s ease-in-out infinite" : "none"
           }}
         />
         
@@ -133,7 +183,9 @@ export function FocusTimerScreen({
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
             filter="url(#timerGlow)"
-            className="transition-all duration-1000 ease-linear"
+            className={`transition-all duration-1000 ease-linear ${
+              !isRunning ? "opacity-60" : "opacity-100"
+            }`}
           />
           
           {/* Inner decorative ring */}
@@ -151,33 +203,88 @@ export function FocusTimerScreen({
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span 
             className="text-7xl font-extralight text-white tracking-tight tabular-nums"
-            style={{ fontVariantNumeric: "tabular-nums" }}
+            style={{ fontVariantNumeric: "tabular-nums", fontWeight: 200 }}
           >
             {formatTime(minutes, seconds)}
           </span>
-          <span className="text-white/40 text-sm mt-3 tracking-widest uppercase">
+          <span className="text-white/40 text-xs mt-3 tracking-[0.2em] uppercase">
             {isRunning ? "Focus Mode" : "Paused"}
           </span>
         </div>
       </div>
 
-      {/* Pause/Play button */}
-      <button
-        onClick={togglePause}
-        className="mt-12 w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all hover:scale-105 active:scale-95"
-        aria-label={isRunning ? "Pause" : "Resume"}
-      >
-        {isRunning ? (
-          <Pause className="w-6 h-6 text-white/80" />
-        ) : (
-          <Play className="w-6 h-6 text-white/80 ml-1" />
-        )}
-      </button>
+      {/* Control Buttons Row */}
+      <div className="relative flex items-center justify-center gap-4 mb-6">
+        {/* +5 min button */}
+        <button
+          onClick={addFiveMinutes}
+          className="px-4 py-2.5 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-white/70 text-sm font-medium flex items-center gap-1.5"
+        >
+          <Plus className="w-4 h-4" />
+          5 min
+        </button>
+        
+        {/* Main Pause/Play button */}
+        <button
+          onClick={togglePause}
+          className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all hover:scale-105 active:scale-95"
+          aria-label={isRunning ? "Pause" : "Resume"}
+        >
+          {isRunning ? (
+            <Pause className="w-6 h-6 text-white/80" />
+          ) : (
+            <Play className="w-6 h-6 text-white/80 ml-1" />
+          )}
+        </button>
+        
+        {/* End button */}
+        <button
+          onClick={onClose}
+          className="px-4 py-2.5 rounded-2xl border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 transition-all text-red-400 text-sm font-medium"
+        >
+          End
+        </button>
+      </div>
 
-      {/* Session info */}
-      <p className="mt-8 text-white/30 text-xs tracking-wider">
-        Stay focused to grow your tree
-      </p>
+      {/* Progress Stats Bar */}
+      <div className="relative w-full max-w-[340px] mx-auto mb-4">
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl px-5 py-4 flex items-center justify-between">
+          <div className="flex flex-col items-center">
+            <div className="flex items-center gap-1.5 text-white/50 text-xs mb-1">
+              <Clock className="w-3.5 h-3.5" />
+              Focused today
+            </div>
+            <span className="text-white font-semibold">
+              {focusedHours}h {focusedMins}m
+            </span>
+          </div>
+          
+          <div className="w-px h-8 bg-white/10" />
+          
+          <div className="flex flex-col items-center">
+            <span className="text-white/50 text-xs mb-1">Sessions</span>
+            <span className="text-white font-semibold">{sessionNumber}/{totalSessions}</span>
+          </div>
+          
+          <div className="w-px h-8 bg-white/10" />
+          
+          <div className="flex flex-col items-center">
+            <div className="flex items-center gap-1.5 text-white/50 text-xs mb-1">
+              <Zap className="w-3.5 h-3.5" />
+              XP earned
+            </div>
+            <span className="text-amber-400 font-semibold">+{Math.floor(earnedXP)} XP</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Social Nudge */}
+      <div className="relative mb-8">
+        <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2 flex items-center gap-2">
+          <Users className="w-4 h-4 text-white/40" />
+          <span className="text-white/50 text-sm">12 friends focusing now</span>
+        </div>
+      </div>
 
       {/* CSS for custom pulse animation */}
       <style jsx>{`
