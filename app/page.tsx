@@ -1,11 +1,27 @@
+"use client"
+
+import { useState } from "react"
 import { XPProgressRing } from "@/components/focus-guard/xp-progress-ring"
 import { StatsRow } from "@/components/focus-guard/stats-row"
 import { FocusButton } from "@/components/focus-guard/focus-button"
 import { ForestPreview } from "@/components/focus-guard/forest-preview"
 import { BottomNav } from "@/components/focus-guard/bottom-nav"
+import { FocusTimerScreen } from "@/components/focus-guard/focus-timer-screen"
 import { Flame, Bell, Settings } from "lucide-react"
 
 export default function HomePage() {
+  const [showTimer, setShowTimer] = useState(false)
+
+  if (showTimer) {
+    return (
+      <FocusTimerScreen
+        initialMinutes={25}
+        onClose={() => setShowTimer(false)}
+        onComplete={() => setShowTimer(false)}
+      />
+    )
+  }
+
   return (
     <div className="min-h-screen bg-background flex justify-center">
       {/* Mobile container - fixed 375px width */}
@@ -58,7 +74,7 @@ export default function HomePage() {
 
           {/* Focus Session CTA */}
           <section className="mb-8">
-            <FocusButton />
+            <FocusButton onStartSession={() => setShowTimer(true)} />
           </section>
 
           {/* Forest Preview */}

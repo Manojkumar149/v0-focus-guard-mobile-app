@@ -2,29 +2,17 @@
 
 import { useState } from "react"
 import { Play } from "lucide-react"
-import { FocusTimerScreen } from "./focus-timer-screen"
 
 interface FocusButtonProps {
-  initialMinutes?: number
+  onStartSession?: () => void
 }
 
-export function FocusButton({ initialMinutes = 25 }: FocusButtonProps) {
+export function FocusButton({ onStartSession }: FocusButtonProps) {
   const [isHovered, setIsHovered] = useState(false)
-  const [showTimer, setShowTimer] = useState(false)
-
-  if (showTimer) {
-    return (
-      <FocusTimerScreen
-        initialMinutes={initialMinutes}
-        onClose={() => setShowTimer(false)}
-        onComplete={() => setShowTimer(false)}
-      />
-    )
-  }
 
   return (
     <button
-      onClick={() => setShowTimer(true)}
+      onClick={onStartSession}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="relative group w-full"
