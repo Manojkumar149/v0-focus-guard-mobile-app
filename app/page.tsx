@@ -69,11 +69,7 @@ export default function HomePage() {
     return <SocialFeedScreen onTabChange={handleTabChange} />
   }
 
-  // Profile Screen (placeholder - redirects to home for now)
-  if (currentScreen === "profile") {
-    // For now, show home since profile isn't built yet
-    setCurrentScreen("home")
-  }
+  // Profile Screen falls through to home dashboard since it's not built yet
 
   // Home Dashboard
   return (
