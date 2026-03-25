@@ -7,17 +7,40 @@ import { FocusButton } from "@/components/focus-guard/focus-button"
 import { ForestPreview } from "@/components/focus-guard/forest-preview"
 import { BottomNav } from "@/components/focus-guard/bottom-nav"
 import { FocusTimerScreen } from "@/components/focus-guard/focus-timer-screen"
+import { SessionCompleteScreen } from "@/components/focus-guard/session-complete-screen"
 import { Flame, Bell, Settings } from "lucide-react"
 
-export default function HomePage() {
-  const [showTimer, setShowTimer] = useState(false)
+type Screen = "home" | "timer" | "complete"
 
-  if (showTimer) {
+export default function HomePage() {
+  const [currentScreen, setCurrentScreen] = useState<Screen>("home")
+
+  if (currentScreen === "timer") {
     return (
       <FocusTimerScreen
         initialMinutes={25}
-        onClose={() => setShowTimer(false)}
-        onComplete={() => setShowTimer(false)}
+        onClose={() => setCurrentScreen("home")}
+        onComplete={() => setCurrentScreen("complete")}
+      />
+    )
+  }
+
+  if (currentScreen === "complete") {
+    return (
+      <SessionCompleteScreen
+        xpEarned={150}
+        sessionDuration="25:00"
+        focusScore={98}
+        streakDays={13}
+        prevXP={500}
+        newXP={650}
+        maxXP={1000}
+        level={7}
+        achievementUnlocked={true}
+        achievementName="Iron Focus"
+        achievementDesc="10 sessions this week"
+        onBreak={() => setCurrentScreen("home")}
+        onNextSession={() => setCurrentScreen("timer")}
       />
     )
   }
@@ -74,7 +97,7 @@ export default function HomePage() {
 
           {/* Focus Session CTA */}
           <section className="mb-8">
-            <FocusButton onStartSession={() => setShowTimer(true)} />
+            <FocusButton onStartSession={() => setCurrentScreen("timer")} />
           </section>
 
           {/* Forest Preview */}
