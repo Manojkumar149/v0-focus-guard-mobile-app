@@ -227,14 +227,25 @@ export function FocusTimerScreen({
         {/* Main Pause/Play button */}
         <button
           onClick={togglePause}
-          className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all hover:scale-105 active:scale-95"
+          className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all hover:scale-105 active:scale-95 relative overflow-hidden"
           aria-label={isRunning ? "Pause" : "Resume"}
         >
-          {isRunning ? (
-            <Pause className="w-6 h-6 text-white/80" />
-          ) : (
-            <Play className="w-6 h-6 text-white/80 ml-1" />
-          )}
+          <span className="relative w-6 h-6">
+            <Pause 
+              className={`w-6 h-6 text-white/80 absolute inset-0 transition-all duration-300 ease-out ${
+                isRunning 
+                  ? "opacity-100 scale-100 rotate-0" 
+                  : "opacity-0 scale-75 -rotate-90"
+              }`} 
+            />
+            <Play 
+              className={`w-6 h-6 text-white/80 absolute inset-0 ml-0.5 transition-all duration-300 ease-out ${
+                isRunning 
+                  ? "opacity-0 scale-75 rotate-90" 
+                  : "opacity-100 scale-100 rotate-0"
+              }`} 
+            />
+          </span>
         </button>
         
         {/* End button */}
