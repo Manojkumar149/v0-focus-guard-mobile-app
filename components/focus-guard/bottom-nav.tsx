@@ -1,16 +1,21 @@
 "use client"
 
-import { useState } from "react"
 import { Home, TreePine, Users, Bot, User } from "lucide-react"
 
+type TabId = "home" | "forest" | "social" | "coach" | "profile"
+
 interface NavItem {
-  id: string
+  id: TabId
   icon: React.ReactNode
   label: string
 }
 
-export function BottomNav() {
-  const [activeTab, setActiveTab] = useState("home")
+interface BottomNavProps {
+  activeTab?: TabId
+  onTabChange?: (tab: TabId) => void
+}
+
+export function BottomNav({ activeTab = "home", onTabChange }: BottomNavProps) {
 
   const navItems: NavItem[] = [
     { id: "home", icon: <Home className="w-5 h-5" />, label: "Home" },
@@ -28,8 +33,8 @@ export function BottomNav() {
           return (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-200 ${
+              onClick={() => onTabChange?.(item.id)}
+              className={`relative flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-200 ${
                 isActive 
                   ? "text-primary bg-primary/10" 
                   : "text-muted-foreground hover:text-foreground"

@@ -21,7 +21,8 @@ export function FocusTimerScreen({
   onComplete 
 }: FocusTimerScreenProps) {
   const [totalSeconds, setTotalSeconds] = useState(initialMinutes * 60)
-  const [isRunning, setIsRunning] = useState(true)
+  const [isRunning, setIsRunning] = useState(false)
+  const [hasStarted, setHasStarted] = useState(false)
   const [earnedXP, setEarnedXP] = useState(0)
   
   const initialTotalSeconds = initialMinutes * 60
@@ -56,7 +57,10 @@ export function FocusTimerScreen({
 
   const togglePause = useCallback(() => {
     setIsRunning((prev) => !prev)
-  }, [])
+    if (!hasStarted) {
+      setHasStarted(true)
+    }
+  }, [hasStarted])
 
   const addFiveMinutes = useCallback(() => {
     setTotalSeconds((prev) => prev + 300)
@@ -208,7 +212,7 @@ export function FocusTimerScreen({
             {formatTime(minutes, seconds)}
           </span>
           <span className="text-white/40 text-xs mt-3 tracking-[0.2em] uppercase">
-            {isRunning ? "Focus Mode" : "Paused"}
+            {isRunning ? "Focus Mode" : (!hasStarted ? "Tap ▶ to begin" : "Paused")}
           </span>
         </div>
       </div>

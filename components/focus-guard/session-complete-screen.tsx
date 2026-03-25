@@ -38,6 +38,7 @@ export function SessionCompleteScreen({
   const [showCheckmark, setShowCheckmark] = useState(false)
   const [showTitle, setShowTitle] = useState(false)
   const [showXP, setShowXP] = useState(false)
+  const [displayXP, setDisplayXP] = useState(0)
   const [showProgress, setShowProgress] = useState(false)
   const [showStats, setShowStats] = useState(false)
   const [showAchievement, setShowAchievement] = useState(false)
@@ -62,6 +63,23 @@ export function SessionCompleteScreen({
 
     return () => timers.forEach(clearTimeout)
   }, [newXP, maxXP])
+
+  // XP count-up animation
+  useEffect(() => {
+    if (!showXP) return
+    
+    const interval = setInterval(() => {
+      setDisplayXP((prev) => {
+        if (prev >= xpEarned) {
+          clearInterval(interval)
+          return xpEarned
+        }
+        return prev + 5
+      })
+    }, 30)
+
+    return () => clearInterval(interval)
+  }, [showXP, xpEarned])
 
   const xpToNextLevel = maxXP - newXP
 
@@ -121,7 +139,7 @@ export function SessionCompleteScreen({
           {/* XP number with float animation */}
           <div className="animate-float">
             <span className="text-7xl font-extrabold text-amber-500 tracking-tight">
-              +{xpEarned}
+              +{displayXP}
             </span>
             <span className="text-3xl font-bold text-amber-500/80 ml-1">XP</span>
           </div>
