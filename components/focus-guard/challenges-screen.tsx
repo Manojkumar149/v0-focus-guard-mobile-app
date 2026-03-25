@@ -138,12 +138,12 @@ export function ChallengesScreen({ onTabChange, onBack }: ChallengesScreenProps)
 
   return (
     <div className="min-h-screen bg-background flex justify-center">
-      <div className="w-full max-w-[375px] min-h-screen bg-background relative overflow-hidden">
+      <div className="w-full max-w-[375px] h-screen bg-background relative flex flex-col overflow-hidden">
         {/* Background glow */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/8 rounded-full blur-3xl" />
-        <div className="absolute bottom-40 left-0 w-56 h-56 bg-purple-600/8 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/8 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-40 left-0 w-56 h-56 bg-purple-600/8 rounded-full blur-3xl pointer-events-none" />
 
-        <main className="relative z-10 px-5 pt-12 pb-28">
+        <main className="relative z-10 flex-1 overflow-y-auto px-5 pt-12 pb-4">
           {/* Header */}
           <header className="flex items-center gap-3 mb-6">
             {onBack && (

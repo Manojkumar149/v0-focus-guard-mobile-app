@@ -122,13 +122,13 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background flex justify-center">
       {/* Mobile container - fixed 375px width */}
-      <div className="w-full max-w-[375px] min-h-screen bg-background relative overflow-hidden">
+      <div className="w-full max-w-[375px] h-screen bg-background relative flex flex-col overflow-hidden">
         {/* Background gradient effects */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-40 right-0 w-64 h-64 bg-purple-600/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-40 right-0 w-64 h-64 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Main content */}
-        <main className="relative z-10 px-5 pt-12 pb-28">
+        <main className="relative z-10 flex-1 overflow-y-auto px-5 pt-12 pb-4">
           {/* Header */}
           <header className="flex items-center justify-between mb-8">
             <div>

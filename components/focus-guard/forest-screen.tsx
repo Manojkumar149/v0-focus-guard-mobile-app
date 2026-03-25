@@ -58,11 +58,11 @@ export function ForestScreen({ onTabChange }: ForestScreenProps) {
 
   return (
     <div className="min-h-screen bg-background flex justify-center">
-      <div className="w-full max-w-[375px] min-h-screen bg-background relative overflow-y-auto pb-24">
+      <div className="w-full max-w-[375px] h-screen bg-background relative flex flex-col overflow-hidden">
         {/* Background effects */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-80 bg-emerald-600/10 rounded-full blur-3xl" />
-        
-        <main className="relative z-10 px-5 pt-10">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-80 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
+
+        <main className="relative z-10 flex-1 overflow-y-auto px-5 pt-10 pb-4">
           {/* Header */}
           <header className="flex items-center justify-between mb-6">
             <div>

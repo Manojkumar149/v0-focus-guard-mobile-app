@@ -207,8 +207,8 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Quick replies + input - sticky above bottom nav */}
-        <div className="shrink-0 pb-20 px-4 bg-background/80 backdrop-blur-xl border-t border-border/50">
+        {/* Quick replies + input */}
+        <div className="shrink-0 px-4 bg-background/80 backdrop-blur-xl border-t border-border/50">
           {/* Quick reply chips */}
           <div className="flex gap-2 overflow-x-auto py-3 scrollbar-hide">
             {quickReplies.map((reply, i) => (

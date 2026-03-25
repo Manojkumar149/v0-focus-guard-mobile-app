@@ -26,8 +26,8 @@ export function BottomNav({ activeTab = "home", onTabChange }: BottomNavProps) {
   ]
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-card/80 backdrop-blur-xl border-t border-border/50 safe-area-inset-bottom">
-      <div className="max-w-[375px] mx-auto flex items-center justify-around py-2 px-2">
+    <nav className="shrink-0 bg-card/80 backdrop-blur-xl border-t border-border/50">
+      <div className="flex items-center justify-around py-2 px-2">
         {navItems.map((item) => {
           const isActive = activeTab === item.id
           return (
