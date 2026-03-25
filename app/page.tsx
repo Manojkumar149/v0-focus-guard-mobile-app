@@ -8,13 +8,21 @@ import { ForestPreview } from "@/components/focus-guard/forest-preview"
 import { BottomNav } from "@/components/focus-guard/bottom-nav"
 import { FocusTimerScreen } from "@/components/focus-guard/focus-timer-screen"
 import { SessionCompleteScreen } from "@/components/focus-guard/session-complete-screen"
+import { ForestScreen } from "@/components/focus-guard/forest-screen"
+import { AICoachScreen } from "@/components/focus-guard/ai-coach-screen"
+import { SocialFeedScreen } from "@/components/focus-guard/social-feed-screen"
 import { Flame, Bell, Settings } from "lucide-react"
 
-type Screen = "home" | "timer" | "complete"
+type Screen = "home" | "timer" | "complete" | "forest" | "coach" | "social" | "profile"
 
 export default function HomePage() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("home")
 
+  const handleTabChange = (tab: "home" | "forest" | "social" | "coach" | "profile") => {
+    setCurrentScreen(tab)
+  }
+
+  // Timer Screen (full screen overlay - no bottom nav)
   if (currentScreen === "timer") {
     return (
       <FocusTimerScreen
@@ -25,6 +33,7 @@ export default function HomePage() {
     )
   }
 
+  // Session Complete Screen (full screen overlay - no bottom nav)
   if (currentScreen === "complete") {
     return (
       <SessionCompleteScreen
@@ -45,6 +54,28 @@ export default function HomePage() {
     )
   }
 
+  // Forest Screen
+  if (currentScreen === "forest") {
+    return <ForestScreen onTabChange={handleTabChange} />
+  }
+
+  // AI Coach Screen
+  if (currentScreen === "coach") {
+    return <AICoachScreen onTabChange={handleTabChange} onBack={() => setCurrentScreen("home")} />
+  }
+
+  // Social Feed Screen
+  if (currentScreen === "social") {
+    return <SocialFeedScreen onTabChange={handleTabChange} />
+  }
+
+  // Profile Screen (placeholder - redirects to home for now)
+  if (currentScreen === "profile") {
+    // For now, show home since profile isn't built yet
+    setCurrentScreen("home")
+  }
+
+  // Home Dashboard
   return (
     <div className="min-h-screen bg-background flex justify-center">
       {/* Mobile container - fixed 375px width */}
@@ -107,7 +138,7 @@ export default function HomePage() {
         </main>
 
         {/* Bottom Navigation */}
-        <BottomNav />
+        <BottomNav activeTab="home" onTabChange={handleTabChange} />
       </div>
     </div>
   )
