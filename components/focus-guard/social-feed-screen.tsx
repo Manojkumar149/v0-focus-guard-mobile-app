@@ -24,9 +24,10 @@ interface ActivityItem {
 
 interface SocialFeedScreenProps {
   onTabChange?: (tab: "home" | "forest" | "social" | "coach" | "profile") => void
+  onViewChallenges?: () => void
 }
 
-export function SocialFeedScreen({ onTabChange }: SocialFeedScreenProps) {
+export function SocialFeedScreen({ onTabChange, onViewChallenges }: SocialFeedScreenProps) {
   const [activities, setActivities] = useState<ActivityItem[]>([
     { id: "1", name: "Arjun", initials: "AR", gradient: "from-indigo-500 to-indigo-700", time: "2m ago", activity: "completed a 25-min deep work session", xp: 150, nudged: false },
     { id: "2", name: "Priya", initials: "PR", gradient: "from-purple-500 to-purple-700", time: "5m ago", activity: "reached a 14-day streak 🔥", xp: 300, nudged: false },
@@ -160,7 +161,7 @@ export function SocialFeedScreen({ onTabChange }: SocialFeedScreenProps) {
                   {hasJoinedChallenge ? "Joined" : "Join"}
                 </button>
               </div>
-              
+
               {/* Progress Bar */}
               <div className="h-2 bg-white/10 rounded-full overflow-hidden mb-2">
                 <div
@@ -168,10 +169,18 @@ export function SocialFeedScreen({ onTabChange }: SocialFeedScreenProps) {
                   style={{ width: "75%" }}
                 />
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-3">
                 <span className="text-xs text-white/50">7.5 / 10 hours</span>
                 <span className="text-xs text-white/50">23 friends participating</span>
               </div>
+              {onViewChallenges && (
+                <button
+                  onClick={onViewChallenges}
+                  className="w-full text-xs text-indigo-400 font-medium hover:text-indigo-300 transition-colors"
+                >
+                  View all challenges →
+                </button>
+              )}
             </div>
           </section>
 

@@ -11,15 +11,34 @@ import { SessionCompleteScreen } from "@/components/focus-guard/session-complete
 import { ForestScreen } from "@/components/focus-guard/forest-screen"
 import { AICoachScreen } from "@/components/focus-guard/ai-coach-screen"
 import { SocialFeedScreen } from "@/components/focus-guard/social-feed-screen"
-import { Flame, Bell, Settings } from "lucide-react"
+import { ProfileScreen } from "@/components/focus-guard/profile-screen"
+import { ProgressStatsScreen } from "@/components/focus-guard/progress-stats-screen"
+import { ChallengesScreen } from "@/components/focus-guard/challenges-screen"
+import { OnboardingScreen } from "@/components/focus-guard/onboarding-screen"
+import { Flame, Bell, Settings, BarChart2 } from "lucide-react"
 
-type Screen = "home" | "timer" | "complete" | "forest" | "coach" | "social" | "profile"
+type Screen =
+  | "onboarding"
+  | "home"
+  | "timer"
+  | "complete"
+  | "forest"
+  | "coach"
+  | "social"
+  | "profile"
+  | "progress"
+  | "challenges"
 
 export default function HomePage() {
-  const [currentScreen, setCurrentScreen] = useState<Screen>("home")
+  const [currentScreen, setCurrentScreen] = useState<Screen>("onboarding")
 
   const handleTabChange = (tab: "home" | "forest" | "social" | "coach" | "profile") => {
     setCurrentScreen(tab)
+  }
+
+  // Onboarding (shown first)
+  if (currentScreen === "onboarding") {
+    return <OnboardingScreen onComplete={() => setCurrentScreen("home")} />
   }
 
   // Timer Screen (full screen overlay - no bottom nav)
@@ -66,10 +85,38 @@ export default function HomePage() {
 
   // Social Feed Screen
   if (currentScreen === "social") {
-    return <SocialFeedScreen onTabChange={handleTabChange} />
+    return (
+      <SocialFeedScreen
+        onTabChange={handleTabChange}
+        onViewChallenges={() => setCurrentScreen("challenges")}
+      />
+    )
   }
 
-  // Profile Screen falls through to home dashboard since it's not built yet
+  // Profile Screen
+  if (currentScreen === "profile") {
+    return <ProfileScreen onTabChange={handleTabChange} />
+  }
+
+  // Progress / Stats Screen
+  if (currentScreen === "progress") {
+    return (
+      <ProgressStatsScreen
+        onTabChange={handleTabChange}
+        onBack={() => setCurrentScreen("home")}
+      />
+    )
+  }
+
+  // Challenges Screen
+  if (currentScreen === "challenges") {
+    return (
+      <ChallengesScreen
+        onTabChange={handleTabChange}
+        onBack={() => setCurrentScreen("social")}
+      />
+    )
+  }
 
   // Home Dashboard
   return (
@@ -79,7 +126,7 @@ export default function HomePage() {
         {/* Background gradient effects */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
         <div className="absolute bottom-40 right-0 w-64 h-64 bg-purple-600/10 rounded-full blur-3xl" />
-        
+
         {/* Main content */}
         <main className="relative z-10 px-5 pt-12 pb-28">
           {/* Header */}
@@ -94,6 +141,12 @@ export default function HomePage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentScreen("progress")}
+                className="w-10 h-10 rounded-full bg-card/60 backdrop-blur-sm border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <BarChart2 className="w-5 h-5" />
+              </button>
               <button className="w-10 h-10 rounded-full bg-card/60 backdrop-blur-sm border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors">
                 <Bell className="w-5 h-5" />
               </button>
