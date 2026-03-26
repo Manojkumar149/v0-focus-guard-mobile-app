@@ -10,7 +10,7 @@ interface ForestScreenProps {
 
 export function ForestScreen({ onTabChange }: ForestScreenProps) {
   // Stable sparkle positions (no Math.random() in render)
-  const sparkles = useMemo(() => 
+  const sparkles = useMemo(() =>
     [...Array(8)].map((_, i) => ({
       left: `${10 + (i * 11.3) % 80}%`,
       top: `${10 + (i * 7.7) % 60}%`,
@@ -66,30 +66,34 @@ export function ForestScreen({ onTabChange }: ForestScreenProps) {
           {/* Header */}
           <header className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-white">Your Forest</h1>
-              <p className="text-sm text-white/50 mt-1">7 trees grown this week</p>
+              <h1 className="text-2xl font-bold text-foreground">Your Forest</h1>
+              <p className="text-sm text-muted-foreground mt-1">7 trees grown this week</p>
             </div>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/20">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/15 border border-orange-500/20">
               <Flame className="w-4 h-4 text-orange-400" />
               <span className="text-sm font-medium text-orange-400">13 days</span>
             </div>
           </header>
 
-          {/* Forest Canvas */}
-          <div className="relative h-64 rounded-2xl bg-gradient-to-b from-emerald-950/40 to-black overflow-hidden mb-6">
-            {/* Sparkles */}
+          {/* Forest Canvas — daytime in light mode, deep forest in dark */}
+          <div className="relative h-64 rounded-2xl overflow-hidden mb-6
+            bg-gradient-to-b from-sky-200/80 to-emerald-100/60
+            dark:from-emerald-950/40 dark:to-slate-950">
+            {/* Sparkles (stars in dark / light rays in light) */}
             {sparkles.map((s, i) => (
               <div
                 key={i}
-                className="absolute w-1 h-1 bg-white/30 rounded-full animate-pulse"
+                className="absolute w-1 h-1 bg-foreground/10 dark:bg-white/25 rounded-full animate-pulse"
                 style={{ left: s.left, top: s.top, animationDelay: s.delay }}
               />
             ))}
-            
+
             {/* Ground strip */}
-            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-emerald-900/60 to-transparent" />
-            
-            {/* Trees grid - 3 rows of 4 */}
+            <div className="absolute bottom-0 left-0 right-0 h-16
+              bg-gradient-to-t from-emerald-700/40 to-transparent
+              dark:from-emerald-900/60 dark:to-transparent" />
+
+            {/* Trees grid — 3 rows of 4 */}
             <div className="absolute bottom-8 left-0 right-0 px-4">
               <div className="grid grid-cols-4 gap-3">
                 {trees.map((tree, i) => (
@@ -103,28 +107,19 @@ export function ForestScreen({ onTabChange }: ForestScreenProps) {
                   >
                     {tree.size === "growing" ? (
                       <div className="relative">
-                        {/* Pulsing glow for growing tree */}
                         <div className="absolute inset-0 bg-emerald-500/30 rounded-full blur-lg animate-pulse" />
-                        <svg
-                          className={`${getTreeHeight(tree.size)} opacity-50`}
-                          viewBox="0 0 24 32"
-                          fill="none"
-                        >
+                        <svg className={`${getTreeHeight(tree.size)} opacity-50`} viewBox="0 0 24 32" fill="none">
                           <rect x="10" y="24" width="4" height="8" fill="#8B4513" />
                           <path d="M12 2L4 14H20L12 2Z" fill={tree.color} />
                           <path d="M12 8L6 18H18L12 8Z" fill={tree.color} opacity="0.9" />
                           <path d="M12 12L7 22H17L12 12Z" fill={tree.color} opacity="0.8" />
                         </svg>
-                        <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] text-emerald-400 whitespace-nowrap">
+                        <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] text-emerald-500 dark:text-emerald-400 whitespace-nowrap">
                           Growing...
                         </span>
                       </div>
                     ) : (
-                      <svg
-                        className={getTreeHeight(tree.size)}
-                        viewBox="0 0 24 32"
-                        fill="none"
-                      >
+                      <svg className={getTreeHeight(tree.size)} viewBox="0 0 24 32" fill="none">
                         <rect x="10" y="24" width="4" height="8" fill="#8B4513" />
                         <path d="M12 2L4 14H20L12 2Z" fill={tree.color} />
                         <path d="M12 8L6 18H18L12 8Z" fill={tree.color} opacity="0.9" />
@@ -139,32 +134,32 @@ export function ForestScreen({ onTabChange }: ForestScreenProps) {
 
           {/* Stats Row */}
           <div className="grid grid-cols-3 gap-3 mb-6">
-            <div className="bg-card/40 backdrop-blur-sm rounded-2xl border border-border/50 p-3 text-center">
+            <div className="bg-card/60 backdrop-blur-sm rounded-2xl border border-border/50 p-3 text-center">
               <div className="flex items-center justify-center gap-1.5 mb-1">
                 <TreePine className="w-4 h-4 text-emerald-400" />
-                <span className="text-lg font-bold text-white">28</span>
+                <span className="text-lg font-bold text-foreground">28</span>
               </div>
-              <p className="text-xs text-white/50">Trees (All time)</p>
+              <p className="text-xs text-muted-foreground">Trees (All time)</p>
             </div>
-            <div className="bg-card/40 backdrop-blur-sm rounded-2xl border border-border/50 p-3 text-center">
+            <div className="bg-card/60 backdrop-blur-sm rounded-2xl border border-border/50 p-3 text-center">
               <div className="flex items-center justify-center gap-1.5 mb-1">
                 <Clock className="w-4 h-4 text-indigo-400" />
-                <span className="text-lg font-bold text-white">14.5 hrs</span>
+                <span className="text-lg font-bold text-foreground">14.5 hrs</span>
               </div>
-              <p className="text-xs text-white/50">This week</p>
+              <p className="text-xs text-muted-foreground">This week</p>
             </div>
-            <div className="bg-card/40 backdrop-blur-sm rounded-2xl border border-border/50 p-3 text-center">
+            <div className="bg-card/60 backdrop-blur-sm rounded-2xl border border-border/50 p-3 text-center">
               <div className="flex items-center justify-center gap-1.5 mb-1">
                 <Trophy className="w-4 h-4 text-amber-400" />
-                <span className="text-lg font-bold text-white">Top 12%</span>
+                <span className="text-lg font-bold text-foreground">Top 12%</span>
               </div>
-              <p className="text-xs text-white/50">This week</p>
+              <p className="text-xs text-muted-foreground">This week</p>
             </div>
           </div>
 
           {/* Weekly Calendar */}
           <div className="mb-6">
-            <h3 className="text-sm font-medium text-white/60 mb-3">This Week&apos;s Progress</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-3">This Week&apos;s Progress</h3>
             <div className="flex items-center justify-between">
               {weekDays.map((day, i) => (
                 <div
@@ -173,10 +168,10 @@ export function ForestScreen({ onTabChange }: ForestScreenProps) {
                     day.isToday ? "ring-2 ring-indigo-500 bg-indigo-500/10" : ""
                   }`}
                 >
-                  <span className="text-xs text-white/50">{day.day}</span>
+                  <span className="text-xs text-muted-foreground">{day.day}</span>
                   <TreePine
                     className={`w-5 h-5 ${
-                      day.hasSession ? "text-emerald-400" : "text-white/20"
+                      day.hasSession ? "text-emerald-400" : "text-muted-foreground/30"
                     }`}
                   />
                 </div>
@@ -187,30 +182,30 @@ export function ForestScreen({ onTabChange }: ForestScreenProps) {
           {/* Achievements Section */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-medium text-white">Achievements</h3>
-              <button className="text-xs text-white/50 flex items-center gap-1 hover:text-white/70 transition-colors">
+              <h3 className="text-sm font-semibold text-foreground">Achievements</h3>
+              <button className="text-xs text-muted-foreground flex items-center gap-1 hover:text-foreground transition-colors">
                 View all <ChevronRight className="w-3 h-3" />
               </button>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {/* Unlocked Achievement */}
-              <div className="bg-card/40 backdrop-blur-sm rounded-2xl border border-amber-500/30 p-3 relative overflow-hidden">
+              <div className="bg-card/60 backdrop-blur-sm rounded-2xl border border-amber-500/30 p-3 relative overflow-hidden">
                 <div className="absolute inset-0 bg-amber-500/5 animate-pulse" />
                 <div className="relative">
                   <div className="text-2xl mb-1">🏅</div>
-                  <h4 className="text-sm font-semibold text-white">Iron Focus</h4>
-                  <p className="text-xs text-white/50 mt-1">10 sessions this week</p>
+                  <h4 className="text-sm font-semibold text-foreground">Iron Focus</h4>
+                  <p className="text-xs text-muted-foreground mt-1">10 sessions this week</p>
                 </div>
               </div>
-              
+
               {/* Locked Achievement */}
               <div className="bg-card/40 backdrop-blur-sm rounded-2xl border border-border/50 p-3 opacity-60">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-2xl">🌲</span>
-                  <Lock className="w-4 h-4 text-white/30" />
+                  <Lock className="w-4 h-4 text-muted-foreground/50" />
                 </div>
-                <h4 className="text-sm font-semibold text-white/70">Forest Guardian</h4>
-                <p className="text-xs text-white/40 mt-1">Grow 50 trees</p>
+                <h4 className="text-sm font-semibold text-muted-foreground">Forest Guardian</h4>
+                <p className="text-xs text-muted-foreground/70 mt-1">Grow 50 trees</p>
               </div>
             </div>
           </div>

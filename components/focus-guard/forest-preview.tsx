@@ -36,18 +36,24 @@ export function ForestPreview() {
         </div>
       </div>
 
-      {/* Forest visualization */}
-      <div className="relative h-20 bg-gradient-to-b from-indigo-950/50 via-slate-900/40 to-emerald-950/50 rounded-xl overflow-hidden">
-        {/* Twinkling stars in sky */}
-        <div className="absolute top-[15%] left-[12%] w-0.5 h-0.5 bg-white/70 rounded-full animate-twinkle" />
-        <div className="absolute top-[22%] left-[38%] w-0.5 h-0.5 bg-white/60 rounded-full animate-twinkle" style={{ animationDelay: "0.6s" }} />
-        <div className="absolute top-[12%] right-[20%] w-0.5 h-0.5 bg-white/50 rounded-full animate-twinkle" style={{ animationDelay: "1.2s" }} />
-        <div className="absolute top-[28%] right-[8%]  w-0.5 h-0.5 bg-white/60 rounded-full animate-twinkle" style={{ animationDelay: "0.3s" }} />
-        <div className="absolute top-[18%] left-[62%] w-0.5 h-0.5 bg-white/40 rounded-full animate-twinkle" style={{ animationDelay: "1.8s" }} />
-        {/* Moon */}
-        <div className="absolute top-1.5 right-5 w-4 h-4 rounded-full border border-yellow-200/30 bg-yellow-100/8" />
+      {/* Forest visualization — daytime sky in light, night in dark */}
+      <div className="relative h-20 rounded-xl overflow-hidden
+        bg-gradient-to-b from-sky-200/80 to-emerald-100/50
+        dark:from-indigo-950/60 dark:via-slate-900/50 dark:to-emerald-950/60">
+        {/* Stars (dark) / sun rays (light) */}
+        <div className="absolute top-[15%] left-[12%] w-0.5 h-0.5 bg-foreground/15 dark:bg-white/70 rounded-full animate-twinkle" />
+        <div className="absolute top-[22%] left-[38%] w-0.5 h-0.5 bg-foreground/12 dark:bg-white/60 rounded-full animate-twinkle" style={{ animationDelay: "0.6s" }} />
+        <div className="absolute top-[12%] right-[20%] w-0.5 h-0.5 bg-foreground/10 dark:bg-white/50 rounded-full animate-twinkle" style={{ animationDelay: "1.2s" }} />
+        <div className="absolute top-[28%] right-[8%]  w-0.5 h-0.5 bg-foreground/12 dark:bg-white/60 rounded-full animate-twinkle" style={{ animationDelay: "0.3s" }} />
+        <div className="absolute top-[18%] left-[62%] w-0.5 h-0.5 bg-foreground/10 dark:bg-white/40 rounded-full animate-twinkle" style={{ animationDelay: "1.8s" }} />
+        {/* Moon (dark) / Sun (light) */}
+        <div className="absolute top-1.5 right-5 w-4 h-4 rounded-full
+          border border-yellow-400/60 bg-yellow-200/40
+          dark:border-yellow-200/30 dark:bg-yellow-100/8" />
         {/* Ground */}
-        <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-emerald-800/70 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-4
+          bg-gradient-to-t from-emerald-600/40 to-transparent
+          dark:from-emerald-800/70 dark:to-transparent" />
         
         {/* Trees */}
         <div className="absolute bottom-2 left-0 right-0 flex items-end justify-around px-4">
@@ -74,9 +80,9 @@ export function ForestPreview() {
         </div>
         
         {/* Subtle sparkles */}
-        <div className="absolute top-2 left-8 w-1 h-1 bg-white/40 rounded-full animate-pulse" />
-        <div className="absolute top-4 right-12 w-1 h-1 bg-white/30 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
-        <div className="absolute top-3 left-1/2 w-1 h-1 bg-white/20 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-2 left-8 w-1 h-1 bg-foreground/15 dark:bg-white/40 rounded-full animate-pulse" />
+        <div className="absolute top-4 right-12 w-1 h-1 bg-foreground/12 dark:bg-white/30 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
+        <div className="absolute top-3 left-1/2 w-1 h-1 bg-foreground/10 dark:bg-white/20 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
     </div>
   )

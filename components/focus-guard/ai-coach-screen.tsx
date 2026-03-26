@@ -47,7 +47,7 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
       isStatsCard: true,
     },
   ])
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -77,7 +77,6 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
     setMessages((prev) => [...prev, newUserMessage])
     setInputText("")
 
-    // Add thinking indicator
     setTimeout(() => {
       const thinkingMessage: Message = {
         id: `thinking-${Date.now()}`,
@@ -89,7 +88,6 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
       setMessages((prev) => [...prev, thinkingMessage])
     }, 500)
 
-    // Replace thinking with actual response
     setTimeout(() => {
       setMessages((prev) => {
         const filtered = prev.filter((m) => !m.isThinking)
@@ -113,31 +111,31 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
   return (
     <div className="min-h-screen bg-background flex justify-center">
       <div className="w-full max-w-[375px] h-screen bg-background flex flex-col">
-        {/* Header - sticky top */}
+        {/* Header */}
         <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-xl border-b border-border/50 px-4 py-3 shrink-0">
           <div className="flex items-center justify-between">
             <button
               onClick={onBack || (() => onTabChange?.("home"))}
-              className="w-10 h-10 rounded-full hover:bg-white/5 flex items-center justify-center transition-colors"
+              className="w-10 h-10 rounded-full hover:bg-muted/50 flex items-center justify-center transition-colors"
             >
-              <ChevronLeft className="w-5 h-5 text-white/60" />
+              <ChevronLeft className="w-5 h-5 text-muted-foreground" />
             </button>
-            
+
             <div className="text-center">
-              <h1 className="text-base font-semibold text-white">AI Coach</h1>
+              <h1 className="text-base font-semibold text-foreground">AI Coach</h1>
               <div className="flex items-center justify-center gap-1.5">
                 <span className="w-2 h-2 bg-emerald-400 rounded-full" />
-                <span className="text-xs text-white/50">Online</span>
+                <span className="text-xs text-muted-foreground">Online</span>
               </div>
             </div>
-            
+
             <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
               <Bot className="w-5 h-5 text-primary" />
             </div>
           </div>
         </header>
 
-        {/* Chat Messages - scrollable flex-1 */}
+        {/* Chat Messages */}
         <div className="flex-1 overflow-y-auto px-4 py-6">
           {messages.map((message) => (
             <div
@@ -149,41 +147,41 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
                   <Bot className="w-4 h-4 text-primary" />
                 </div>
               )}
-              
+
               <div className={`max-w-[75%] ${message.type === "user" ? "order-1" : ""}`}>
                 {message.isThinking ? (
                   <div className="flex items-center gap-2 ml-10">
-                    <div className="bg-primary/20 border border-primary/30 rounded-2xl rounded-tl-sm px-4 py-3">
+                    <div className="bg-muted/60 border border-border/50 rounded-2xl rounded-tl-sm px-4 py-3">
                       <div className="flex gap-1">
-                        <span className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                        <span className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                        <span className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                        <span className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                        <span className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                        <span className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                       </div>
                     </div>
                   </div>
                 ) : message.isStatsCard ? (
                   <div className="ml-10">
-                    <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-                      <h4 className="text-sm font-semibold text-white mb-3">Your Weekly Insights</h4>
+                    <div className="bg-card/80 border border-border/60 rounded-xl p-4">
+                      <h4 className="text-sm font-semibold text-foreground mb-3">Your Weekly Insights</h4>
                       <div className="space-y-2.5">
                         <div className="flex items-center gap-3">
                           <Flame className="w-4 h-4 text-orange-400" />
-                          <span className="text-sm text-white/70">Best streak:</span>
-                          <span className="text-sm font-medium text-white ml-auto">13 days</span>
+                          <span className="text-sm text-muted-foreground">Best streak:</span>
+                          <span className="text-sm font-medium text-foreground ml-auto">13 days</span>
                         </div>
                         <div className="flex items-center gap-3">
                           <Clock className="w-4 h-4 text-indigo-400" />
-                          <span className="text-sm text-white/70">Avg session:</span>
-                          <span className="text-sm font-medium text-white ml-auto">24 min</span>
+                          <span className="text-sm text-muted-foreground">Avg session:</span>
+                          <span className="text-sm font-medium text-foreground ml-auto">24 min</span>
                         </div>
                         <div className="flex items-center gap-3">
                           <Target className="w-4 h-4 text-emerald-400" />
-                          <span className="text-sm text-white/70">Focus score:</span>
-                          <span className="text-sm font-medium text-white ml-auto">94%</span>
+                          <span className="text-sm text-muted-foreground">Focus score:</span>
+                          <span className="text-sm font-medium text-foreground ml-auto">94%</span>
                         </div>
                       </div>
                     </div>
-                    <span className="text-xs text-white/30 mt-1 block">{message.time}</span>
+                    <span className="text-xs text-muted-foreground/60 mt-1 block">{message.time}</span>
                   </div>
                 ) : (
                   <>
@@ -191,12 +189,17 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
                       className={`px-4 py-3 ${
                         message.type === "user"
                           ? "bg-indigo-600 rounded-2xl rounded-tr-sm"
-                          : "bg-primary/20 border border-primary/30 rounded-2xl rounded-tl-sm"
+                          : "bg-muted/60 border border-border/50 rounded-2xl rounded-tl-sm"
                       }`}
                     >
-                      <p className="text-sm text-white leading-relaxed">{message.content}</p>
+                      {/* User messages stay white-on-indigo; bot messages use theme text */}
+                      <p className={`text-sm leading-relaxed ${
+                        message.type === "user" ? "text-white" : "text-foreground"
+                      }`}>
+                        {message.content}
+                      </p>
                     </div>
-                    <span className={`text-xs text-white/30 mt-1 block ${message.type === "user" ? "text-right" : ""}`}>
+                    <span className={`text-xs text-muted-foreground/60 mt-1 block ${message.type === "user" ? "text-right" : ""}`}>
                       {message.time}
                     </span>
                   </>
@@ -215,19 +218,19 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
               <button
                 key={i}
                 onClick={() => handleQuickReply(reply.text)}
-                className="shrink-0 px-3 py-2 rounded-full bg-white/5 border border-white/10 text-white/70 text-sm hover:bg-white/10 transition-colors"
+                className="shrink-0 px-3 py-2 rounded-full bg-muted/50 border border-border/60 text-muted-foreground text-sm hover:bg-muted hover:text-foreground transition-colors"
               >
                 {reply.text} {reply.emoji}
               </button>
             ))}
           </div>
-          
+
           {/* Input bar */}
           <div className="flex items-center gap-3 pb-2">
-            <button className="w-10 h-10 rounded-full hover:bg-white/5 flex items-center justify-center transition-colors shrink-0">
-              <Mic className="w-5 h-5 text-white/40" />
+            <button className="w-10 h-10 rounded-full hover:bg-muted/50 flex items-center justify-center transition-colors shrink-0">
+              <Mic className="w-5 h-5 text-muted-foreground/60" />
             </button>
-            
+
             <div className="flex-1 relative">
               <input
                 type="text"
@@ -235,17 +238,17 @@ export function AICoachScreen({ onTabChange, onBack }: AICoachScreenProps) {
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
                 placeholder="Message your coach..."
-                className="w-full bg-white/5 border border-white/10 rounded-full px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-primary/50 transition-colors"
+                className="w-full bg-muted/40 border border-border/60 rounded-full px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/50 transition-colors"
               />
             </div>
-            
+
             <button
               onClick={handleSend}
               disabled={!inputText.trim()}
               className={`w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 ${
                 inputText.trim()
                   ? "bg-primary text-white shadow-[0_0_20px_rgba(79,70,229,0.4)]"
-                  : "bg-white/5 text-white/30"
+                  : "bg-muted/50 text-muted-foreground/40"
               }`}
             >
               <Send className="w-5 h-5" />

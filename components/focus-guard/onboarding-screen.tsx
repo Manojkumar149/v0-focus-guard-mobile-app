@@ -108,12 +108,12 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
             className="absolute top-1/2 -translate-y-1/2 right-0 w-48 h-48 bg-pink-500/8 rounded-full blur-[60px] animate-drift"
             style={{ animationDelay: "8s" }}
           />
-          {/* Star sparkles */}
-          <div className="absolute top-[14%] left-[10%] w-1 h-1 bg-white/50 rounded-full animate-twinkle" />
-          <div className="absolute top-[20%] right-[12%] w-1 h-1 bg-white/40 rounded-full animate-twinkle" style={{ animationDelay: "0.8s" }} />
-          <div className="absolute top-[60%] left-[7%]  w-1.5 h-1.5 bg-white/30 rounded-full animate-twinkle" style={{ animationDelay: "1.4s" }} />
-          <div className="absolute top-[75%] right-[9%] w-1 h-1 bg-white/40 rounded-full animate-twinkle" style={{ animationDelay: "0.3s" }} />
-          <div className="absolute top-[45%] left-[85%] w-1 h-1 bg-white/25 rounded-full animate-twinkle" style={{ animationDelay: "1.9s" }} />
+          {/* Star sparkles — use foreground opacity so visible in both light & dark */}
+          <div className="absolute top-[14%] left-[10%] w-1 h-1 bg-foreground/25 rounded-full animate-twinkle" />
+          <div className="absolute top-[20%] right-[12%] w-1 h-1 bg-foreground/20 rounded-full animate-twinkle" style={{ animationDelay: "0.8s" }} />
+          <div className="absolute top-[60%] left-[7%]  w-1.5 h-1.5 bg-foreground/15 rounded-full animate-twinkle" style={{ animationDelay: "1.4s" }} />
+          <div className="absolute top-[75%] right-[9%] w-1 h-1 bg-foreground/20 rounded-full animate-twinkle" style={{ animationDelay: "0.3s" }} />
+          <div className="absolute top-[45%] left-[85%] w-1 h-1 bg-foreground/15 rounded-full animate-twinkle" style={{ animationDelay: "1.9s" }} />
         </div>
 
         {/* Skip */}
@@ -133,9 +133,9 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
         >
           {/* Emoji orb */}
           <div className="relative flex items-center justify-center mb-8">
-            {/* Spinning decorative rings */}
-            <div className="absolute w-40 h-40 rounded-full border border-white/6 animate-spin-slow" />
-            <div className="absolute w-32 h-32 rounded-full border border-white/10 animate-spin-reverse" />
+            {/* Spinning decorative rings — foreground opacity works in light & dark */}
+            <div className="absolute w-40 h-40 rounded-full border border-foreground/8 animate-spin-slow" />
+            <div className="absolute w-32 h-32 rounded-full border border-foreground/12 animate-spin-reverse" />
             {/* Glow backdrop */}
             <div
               className="absolute w-24 h-24 rounded-full blur-2xl opacity-70 animate-pulse"
@@ -143,7 +143,7 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
             />
             {/* Main orb */}
             <div
-              className={`relative w-24 h-24 bg-gradient-to-br ${slide.gradient} rounded-full flex items-center justify-center shadow-2xl border border-white/20`}
+              className={`relative w-24 h-24 bg-gradient-to-br ${slide.gradient} rounded-full flex items-center justify-center shadow-2xl border border-foreground/15`}
             >
               <span className="text-5xl leading-none animate-bounce-in">{slide.emoji}</span>
             </div>
@@ -168,10 +168,10 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
                   <button
                     key={goal.id}
                     onClick={() => setSelectedGoal(goal.id)}
-                    className="relative p-4 rounded-2xl text-left transition-all duration-200 active:scale-95 border bg-card/50 animate-scale-in"
+                    className="relative p-4 rounded-2xl text-left transition-all duration-200 active:scale-95 border border-border/40 bg-card/50 animate-scale-in"
                     style={{
                       animationDelay: `${i * 0.07}s`,
-                      borderColor: isSelected ? goal.borderColor : "rgba(255,255,255,0.08)",
+                      borderColor: isSelected ? goal.borderColor : undefined,
                       boxShadow: isSelected
                         ? `0 0 0 1px ${goal.borderColor}, 0 6px 28px ${goal.shadowColor}`
                         : undefined,
