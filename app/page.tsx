@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { XPProgressRing } from "@/components/focus-guard/xp-progress-ring"
 import { StatsRow } from "@/components/focus-guard/stats-row"
-import { FocusButton } from "@/components/focus-guard/focus-button"
 import { ForestPreview } from "@/components/focus-guard/forest-preview"
 import { BottomNav } from "@/components/focus-guard/bottom-nav"
 import { FocusTimerScreen } from "@/components/focus-guard/focus-timer-screen"
@@ -15,11 +14,13 @@ import { ProfileScreen } from "@/components/focus-guard/profile-screen"
 import { ProgressStatsScreen } from "@/components/focus-guard/progress-stats-screen"
 import { ChallengesScreen } from "@/components/focus-guard/challenges-screen"
 import { OnboardingScreen } from "@/components/focus-guard/onboarding-screen"
-import { Flame, Bell, Settings, BarChart2 } from "lucide-react"
+import { SessionSetupScreen } from "@/components/focus-guard/session-setup-screen"
+import { Flame, Bell, Settings, BarChart2, X, Play } from "lucide-react"
 
 type Screen =
   | "onboarding"
   | "home"
+  | "setup"
   | "timer"
   | "complete"
   | "forest"
@@ -29,35 +30,69 @@ type Screen =
   | "progress"
   | "challenges"
 
+const NOTIFICATIONS = [
+  { id: "1", icon: "🔥", title: "Keep your streak!", body: "You haven't focused today. Your 12-day streak ends at midnight.", time: "2h ago", unread: true },
+  { id: "2", icon: "🏅", title: "Achievement unlocked", body: "Iron Focus — 10 sessions this week. Well done!", time: "Yesterday", unread: true },
+  { id: "3", icon: "👋", title: "Arjun nudged you", body: "Arjun says: Time to focus! 💪", time: "Yesterday", unread: false },
+  { id: "4", icon: "📊", title: "Weekly report ready", body: "You focused 16.3 hrs this week — top 18% of users!", time: "Mon", unread: false },
+]
+
 export default function HomePage() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("onboarding")
+  const [sessionName, setSessionName] = useState("Focus Session")
+  const [sessionMinutes, setSessionMinutes] = useState(25)
+  const [showNotifications, setShowNotifications] = useState(false)
+  const [notifications, setNotifications] = useState(NOTIFICATIONS)
+
+  const unreadCount = notifications.filter(n => n.unread).length
 
   const handleTabChange = (tab: "home" | "forest" | "social" | "coach" | "profile") => {
     setCurrentScreen(tab)
   }
 
-  // Onboarding (shown first)
+  const handleStartSession = (name: string, minutes: number) => {
+    setSessionName(name)
+    setSessionMinutes(minutes)
+    setCurrentScreen("timer")
+  }
+
+  const markAllRead = () => setNotifications(n => n.map(x => ({ ...x, unread: false })))
+
+  // Onboarding
   if (currentScreen === "onboarding") {
     return <OnboardingScreen onComplete={() => setCurrentScreen("home")} />
   }
 
-  // Timer Screen (full screen overlay - no bottom nav)
+  // Session Setup
+  if (currentScreen === "setup") {
+    return (
+      <SessionSetupScreen
+        onBack={() => setCurrentScreen("home")}
+        onStart={handleStartSession}
+      />
+    )
+  }
+
+  // Timer Screen
   if (currentScreen === "timer") {
     return (
       <FocusTimerScreen
-        initialMinutes={25}
+        initialMinutes={sessionMinutes}
+        sessionName={sessionName}
+        sessionNumber={1}
+        totalSessions={3}
         onClose={() => setCurrentScreen("home")}
         onComplete={() => setCurrentScreen("complete")}
       />
     )
   }
 
-  // Session Complete Screen (full screen overlay - no bottom nav)
+  // Session Complete Screen
   if (currentScreen === "complete") {
     return (
       <SessionCompleteScreen
-        xpEarned={150}
-        sessionDuration="25:00"
+        xpEarned={Math.round(sessionMinutes * 1.5 + 75)}
+        sessionDuration={`${sessionMinutes}:00`}
         focusScore={98}
         streakDays={13}
         prevXP={500}
@@ -68,7 +103,7 @@ export default function HomePage() {
         achievementName="Iron Focus"
         achievementDesc="10 sessions this week"
         onBreak={() => setCurrentScreen("home")}
-        onNextSession={() => setCurrentScreen("timer")}
+        onNextSession={() => setCurrentScreen("setup")}
       />
     )
   }
@@ -121,7 +156,6 @@ export default function HomePage() {
   // Home Dashboard
   return (
     <div className="min-h-screen bg-background flex justify-center">
-      {/* Mobile container - fixed 375px width */}
       <div className="w-full max-w-[375px] h-screen bg-background relative flex flex-col overflow-hidden">
         {/* Background gradient effects */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
@@ -132,25 +166,37 @@ export default function HomePage() {
           {/* Header */}
           <header className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-xl font-semibold text-foreground">
-                Good morning, Ravi
-              </h1>
+              <h1 className="text-xl font-semibold text-foreground">Good morning, Ravi</h1>
               <div className="flex items-center gap-1.5 mt-1">
                 <Flame className="w-4 h-4 text-orange-500" />
                 <span className="text-sm font-medium text-orange-500">12 Day Streak</span>
               </div>
             </div>
             <div className="flex items-center gap-2">
+              {/* Progress button */}
               <button
                 onClick={() => setCurrentScreen("progress")}
                 className="w-10 h-10 rounded-full bg-card/60 backdrop-blur-sm border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
               >
                 <BarChart2 className="w-5 h-5" />
               </button>
-              <button className="w-10 h-10 rounded-full bg-card/60 backdrop-blur-sm border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors">
+              {/* Bell */}
+              <button
+                onClick={() => setShowNotifications(true)}
+                className="relative w-10 h-10 rounded-full bg-card/60 backdrop-blur-sm border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+              >
                 <Bell className="w-5 h-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white font-bold flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
               </button>
-              <button className="w-10 h-10 rounded-full bg-card/60 backdrop-blur-sm border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors">
+              {/* Settings → Profile */}
+              <button
+                onClick={() => setCurrentScreen("profile")}
+                className="w-10 h-10 rounded-full bg-card/60 backdrop-blur-sm border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+              >
                 <Settings className="w-5 h-5" />
               </button>
             </div>
@@ -158,26 +204,28 @@ export default function HomePage() {
 
           {/* XP Progress Ring */}
           <section className="flex justify-center mb-8">
-            <XPProgressRing
-              currentXP={650}
-              maxXP={1000}
-              level={7}
-              levelTitle="Flow Master"
-            />
+            <XPProgressRing currentXP={650} maxXP={1000} level={7} levelTitle="Flow Master" />
           </section>
 
           {/* Today's Stats */}
           <section className="mb-8">
-            <StatsRow
-              focusTime="2.5 hrs"
-              sessions={3}
-              percentile={18}
-            />
+            <StatsRow focusTime="2.5 hrs" sessions={3} percentile={18} />
           </section>
 
           {/* Focus Session CTA */}
           <section className="mb-8">
-            <FocusButton onStartSession={() => setCurrentScreen("timer")} />
+            <button
+              onClick={() => setCurrentScreen("setup")}
+              className="relative group w-full"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+              <div className="relative flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 text-white font-semibold py-4 px-8 rounded-2xl shadow-2xl group-hover:scale-[1.02] group-active:scale-[0.98] transition-transform">
+                <div className="bg-white/20 rounded-full p-2">
+                  <Play className="w-5 h-5 fill-current" />
+                </div>
+                <span className="text-lg">Start Focus Session</span>
+              </div>
+            </button>
           </section>
 
           {/* Forest Preview */}
@@ -188,6 +236,49 @@ export default function HomePage() {
 
         {/* Bottom Navigation */}
         <BottomNav activeTab="home" onTabChange={handleTabChange} />
+
+        {/* Notifications overlay */}
+        {showNotifications && (
+          <div className="absolute inset-0 z-50 flex flex-col justify-start" onClick={() => setShowNotifications(false)}>
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+            <div
+              className="relative bg-card border-b border-border/50 rounded-b-3xl px-5 pt-14 pb-5 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-base font-bold text-foreground">Notifications</h2>
+                <div className="flex items-center gap-3">
+                  {unreadCount > 0 && (
+                    <button onClick={markAllRead} className="text-xs text-primary hover:text-primary/80">
+                      Mark all read
+                    </button>
+                  )}
+                  <button onClick={() => setShowNotifications(false)} className="text-muted-foreground hover:text-foreground">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+              <div className="space-y-2">
+                {notifications.map((n) => (
+                  <div
+                    key={n.id}
+                    className={`flex items-start gap-3 p-3 rounded-xl transition-colors ${n.unread ? "bg-primary/8 border border-primary/20" : "bg-background/40"}`}
+                  >
+                    <span className="text-xl shrink-0 mt-0.5">{n.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-sm font-semibold text-foreground truncate">{n.title}</span>
+                        <span className="text-[10px] text-muted-foreground shrink-0">{n.time}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{n.body}</p>
+                    </div>
+                    {n.unread && <div className="w-2 h-2 bg-primary rounded-full shrink-0 mt-1.5" />}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
-import { X, Pause, Play, TreeDeciduous, Settings, Plus, Clock, Zap, Users } from "lucide-react"
+import { X, Pause, Play, TreeDeciduous, Settings, Plus, Clock, Zap, Users, ChevronDown } from "lucide-react"
 
 interface FocusTimerScreenProps {
   initialMinutes?: number
@@ -12,18 +12,22 @@ interface FocusTimerScreenProps {
   onComplete?: () => void
 }
 
-export function FocusTimerScreen({ 
-  initialMinutes = 25, 
-  sessionName = "DSA Practice",
-  sessionNumber = 2,
+export function FocusTimerScreen({
+  initialMinutes = 25,
+  sessionName: initialSessionName = "Focus Session",
+  sessionNumber = 1,
   totalSessions = 3,
-  onClose, 
-  onComplete 
+  onClose,
+  onComplete
 }: FocusTimerScreenProps) {
   const [totalSeconds, setTotalSeconds] = useState(initialMinutes * 60)
   const [isRunning, setIsRunning] = useState(false)
   const [hasStarted, setHasStarted] = useState(false)
   const [earnedXP, setEarnedXP] = useState(0)
+  const [sessionName, setSessionName] = useState(initialSessionName)
+  const [showSettings, setShowSettings] = useState(false)
+  const [editingName, setEditingName] = useState(false)
+  const [nameInput, setNameInput] = useState(initialSessionName)
   
   const initialTotalSeconds = initialMinutes * 60
   const progress = ((initialTotalSeconds - totalSeconds) / initialTotalSeconds) * 100
@@ -103,6 +107,7 @@ export function FocusTimerScreen({
         </span>
         
         <button
+          onClick={() => setShowSettings(true)}
           className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 transition-colors flex items-center justify-center"
           aria-label="Settings"
         >
@@ -312,6 +317,80 @@ export function FocusTimerScreen({
           }
         }
       `}</style>
+
+      {/* Settings Sheet */}
+      {showSettings && (
+        <div className="absolute inset-0 z-50 flex flex-col justify-end" onClick={() => setShowSettings(false)}>
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div
+            className="relative bg-[#0F0F1A] border-t border-white/10 rounded-t-3xl px-5 pt-4 pb-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Drag handle */}
+            <div className="w-10 h-1 bg-white/20 rounded-full mx-auto mb-5" />
+            <h3 className="text-base font-semibold text-white mb-5">Session Settings</h3>
+
+            {/* Session name */}
+            <div className="mb-4">
+              <label className="text-xs text-white/50 uppercase tracking-wider mb-2 block">Session Name</label>
+              {editingName ? (
+                <div className="flex gap-2">
+                  <input
+                    autoFocus
+                    value={nameInput}
+                    onChange={(e) => setNameInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        setSessionName(nameInput.trim() || sessionName)
+                        setEditingName(false)
+                      }
+                    }}
+                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-primary/50"
+                  />
+                  <button
+                    onClick={() => { setSessionName(nameInput.trim() || sessionName); setEditingName(false) }}
+                    className="px-4 py-2.5 bg-primary rounded-xl text-white text-sm font-medium"
+                  >
+                    Save
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => { setNameInput(sessionName); setEditingName(true) }}
+                  className="w-full flex items-center justify-between bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white/80 text-sm hover:bg-white/10 transition-colors"
+                >
+                  <span>{sessionName}</span>
+                  <span className="text-white/40 text-xs">Tap to edit</span>
+                </button>
+              )}
+            </div>
+
+            {/* Add time */}
+            <div className="mb-5">
+              <label className="text-xs text-white/50 uppercase tracking-wider mb-2 block">Add Time</label>
+              <div className="flex gap-2">
+                {[5, 10, 15].map((min) => (
+                  <button
+                    key={min}
+                    onClick={() => { setTotalSeconds(s => s + min * 60); setShowSettings(false) }}
+                    className="flex-1 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/70 text-sm hover:bg-white/10 transition-colors"
+                  >
+                    +{min} min
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* End session */}
+            <button
+              onClick={() => { setShowSettings(false); onClose() }}
+              className="w-full py-3 rounded-xl border border-red-500/30 text-red-400 text-sm font-medium hover:bg-red-500/10 transition-colors"
+            >
+              End Session
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
