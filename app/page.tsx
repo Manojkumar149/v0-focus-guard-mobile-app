@@ -43,6 +43,7 @@ export default function HomePage() {
   const [sessionMinutes, setSessionMinutes] = useState(25)
   const [showNotifications, setShowNotifications] = useState(false)
   const [notifications, setNotifications] = useState(NOTIFICATIONS)
+  const [darkMode, setDarkMode] = useState(true)
 
   const unreadCount = notifications.filter(n => n.unread).length
 
@@ -130,7 +131,7 @@ export default function HomePage() {
 
   // Profile Screen
   if (currentScreen === "profile") {
-    return <ProfileScreen onTabChange={handleTabChange} />
+    return <ProfileScreen onTabChange={handleTabChange} darkMode={darkMode} onDarkModeChange={setDarkMode} />
   }
 
   // Progress / Stats Screen
@@ -155,7 +156,7 @@ export default function HomePage() {
 
   // Home Dashboard
   return (
-    <div className="min-h-screen bg-background flex justify-center">
+    <div className={`min-h-screen bg-background flex justify-center ${darkMode ? "dark" : "light"}`}>
       <div className="w-full max-w-[375px] h-screen bg-background relative flex flex-col overflow-hidden">
         {/* Background gradient effects */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />

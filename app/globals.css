@@ -3,8 +3,49 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* FocusGuard Light Theme */
+:root, .light {
+  --background: oklch(0.97 0.005 280);
+  --foreground: oklch(0.14 0.02 280);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.14 0.02 280);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.14 0.02 280);
+  --primary: oklch(0.55 0.25 270);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.92 0.01 280);
+  --secondary-foreground: oklch(0.14 0.02 280);
+  --muted: oklch(0.92 0.01 280);
+  --muted-foreground: oklch(0.48 0.02 280);
+  --accent: oklch(0.6 0.28 270);
+  --accent-foreground: oklch(0.98 0 0);
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.86 0.02 280);
+  --input: oklch(0.92 0.01 280);
+  --ring: oklch(0.55 0.25 270);
+  --chart-1: oklch(0.55 0.25 270);
+  --chart-2: oklch(0.55 0.2 150);
+  --chart-3: oklch(0.6 0.18 80);
+  --chart-4: oklch(0.55 0.22 330);
+  --chart-5: oklch(0.55 0.2 30);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.95 0.005 280);
+  --sidebar-foreground: oklch(0.14 0.02 280);
+  --sidebar-primary: oklch(0.55 0.25 270);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.92 0.01 280);
+  --sidebar-accent-foreground: oklch(0.14 0.02 280);
+  --sidebar-border: oklch(0.86 0.02 280);
+  --sidebar-ring: oklch(0.55 0.25 270);
+  --glow: oklch(0.55 0.25 270 / 0.3);
+  --success: oklch(0.55 0.2 150);
+  --warning: oklch(0.6 0.18 80);
+  --streak: oklch(0.6 0.22 30);
+}
+
 /* FocusGuard Dark Theme - Premium Game-like Design */
-:root {
+.dark {
   /* Dark background #0F0F1A */
   --background: oklch(0.12 0.02 280);
   --foreground: oklch(0.98 0 0);

@@ -6,6 +6,8 @@ import { BottomNav } from "./bottom-nav"
 
 interface ProfileScreenProps {
   onTabChange?: (tab: "home" | "forest" | "social" | "coach" | "profile") => void
+  darkMode?: boolean
+  onDarkModeChange?: (value: boolean) => void
 }
 
 const levelTitles = ["Beginner", "Focus Warrior", "Flow Master", "Deep Worker", "Legend"]
@@ -43,9 +45,8 @@ function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) =>
   )
 }
 
-export function ProfileScreen({ onTabChange }: ProfileScreenProps) {
+export function ProfileScreen({ onTabChange, darkMode = true, onDarkModeChange }: ProfileScreenProps) {
   const [notificationsOn, setNotificationsOn] = useState(true)
-  const [darkMode, setDarkMode] = useState(true)
   const [isPro, setIsPro] = useState(false)
   const [selectedTheme, setSelectedTheme] = useState("indigo")
   const [showThemes, setShowThemes] = useState(false)
@@ -66,7 +67,7 @@ export function ProfileScreen({ onTabChange }: ProfileScreenProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background flex justify-center">
+    <div className={`min-h-screen bg-background flex justify-center ${darkMode ? "dark" : "light"}`}>
       <div className="w-full max-w-[375px] h-screen bg-background relative flex flex-col overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -207,7 +208,7 @@ export function ProfileScreen({ onTabChange }: ProfileScreenProps) {
                     <div className="text-xs text-muted-foreground">{darkMode ? "Dark theme active" : "Light mode (coming soon)"}</div>
                   </div>
                 </div>
-                <Toggle value={darkMode} onChange={setDarkMode} />
+                <Toggle value={darkMode} onChange={(v) => onDarkModeChange?.(v)} />
               </div>
             </div>
 
