@@ -159,18 +159,26 @@ export default function HomePage() {
     <div className={`min-h-screen bg-background flex justify-center ${darkMode ? "dark" : "light"}`}>
       <div className="w-full max-w-[375px] h-screen bg-background relative flex flex-col overflow-hidden">
         {/* Background gradient effects */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-40 right-0 w-64 h-64 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-20 -left-20 w-96 h-96 bg-indigo-500/15 rounded-full blur-[80px] pointer-events-none animate-drift" />
+        <div className="absolute top-1/3 -right-16 w-72 h-72 bg-purple-600/12 rounded-full blur-[70px] pointer-events-none animate-drift" style={{ animationDelay: "5s" }} />
+        <div className="absolute bottom-32 left-1/4 w-56 h-56 bg-blue-500/10 rounded-full blur-[60px] pointer-events-none animate-drift" style={{ animationDelay: "9s" }} />
+        {/* Star sparkles */}
+        <div className="absolute top-24 right-10 w-1 h-1 bg-white/40 rounded-full animate-twinkle pointer-events-none" />
+        <div className="absolute top-44 left-6 w-1 h-1 bg-white/30 rounded-full animate-twinkle pointer-events-none" style={{ animationDelay: "1.1s" }} />
+        <div className="absolute top-80 right-14 w-1.5 h-1.5 bg-white/25 rounded-full animate-twinkle pointer-events-none" style={{ animationDelay: "0.6s" }} />
 
         {/* Main content */}
         <main className="relative z-10 flex-1 overflow-y-auto px-5 pt-12 pb-4">
           {/* Header */}
-          <header className="flex items-center justify-between mb-8">
+          <header className="flex items-center justify-between mb-8 animate-slide-down">
             <div>
-              <h1 className="text-xl font-semibold text-foreground">Good morning, Ravi</h1>
+              <h1 className="text-xl font-semibold text-foreground">
+                Good morning, <span className="text-gradient-indigo font-bold">Ravi</span> 👋
+              </h1>
               <div className="flex items-center gap-1.5 mt-1">
-                <Flame className="w-4 h-4 text-orange-500" />
-                <span className="text-sm font-medium text-orange-500">12 Day Streak</span>
+                <Flame className="w-4 h-4 text-orange-500 animate-bounce" />
+                <span className="text-sm font-semibold text-orange-400">12 Day Streak</span>
+                <span className="text-xs bg-orange-500/15 text-orange-400 border border-orange-500/25 rounded-full px-2 py-0.5 font-medium">🔥 On fire!</span>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -204,12 +212,12 @@ export default function HomePage() {
           </header>
 
           {/* XP Progress Ring */}
-          <section className="flex justify-center mb-8">
+          <section className="flex justify-center mb-8 animate-scale-in" style={{ animationDelay: "0.1s" }}>
             <XPProgressRing currentXP={650} maxXP={1000} level={7} levelTitle="Flow Master" />
           </section>
 
           {/* Today's Stats */}
-          <section className="mb-8">
+          <section className="mb-8 animate-slide-up" style={{ animationDelay: "0.2s" }}>
             <StatsRow focusTime="2.5 hrs" sessions={3} percentile={18} />
           </section>
 
@@ -220,7 +228,7 @@ export default function HomePage() {
               className="relative group w-full"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
-              <div className="relative flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 text-white font-semibold py-4 px-8 rounded-2xl shadow-2xl group-hover:scale-[1.02] group-active:scale-[0.98] transition-transform">
+              <div className="shimmer-overlay overflow-hidden relative flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 text-white font-semibold py-4 px-8 rounded-2xl shadow-2xl group-hover:scale-[1.02] group-active:scale-[0.98] transition-transform" style={{ boxShadow: "0 4px 32px rgba(99,102,241,0.5), 0 1px 0 rgba(255,255,255,0.15) inset" }}>
                 <div className="bg-white/20 rounded-full p-2">
                   <Play className="w-5 h-5 fill-current" />
                 </div>
@@ -230,7 +238,7 @@ export default function HomePage() {
           </section>
 
           {/* Forest Preview */}
-          <section>
+          <section className="animate-slide-up" style={{ animationDelay: "0.3s" }}>
             <ForestPreview />
           </section>
         </main>

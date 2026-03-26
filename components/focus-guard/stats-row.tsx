@@ -1,11 +1,5 @@
 import { Clock, Zap, Trophy } from "lucide-react"
 
-interface Stat {
-  icon: React.ReactNode
-  value: string
-  label: string
-}
-
 interface StatsRowProps {
   focusTime: string
   sessions: number
@@ -13,22 +7,31 @@ interface StatsRowProps {
 }
 
 export function StatsRow({ focusTime, sessions, percentile }: StatsRowProps) {
-  const stats: Stat[] = [
+  const stats = [
     {
       icon: <Clock className="w-4 h-4" />,
       value: focusTime,
-      label: "focused"
+      label: "focused",
+      iconBg: "bg-cyan-500/20",
+      iconColor: "text-cyan-400",
+      valueColor: "text-cyan-300",
     },
     {
       icon: <Zap className="w-4 h-4" />,
       value: `${sessions}`,
-      label: "sessions"
+      label: "sessions",
+      iconBg: "bg-amber-500/20",
+      iconColor: "text-amber-400",
+      valueColor: "text-amber-300",
     },
     {
       icon: <Trophy className="w-4 h-4" />,
       value: `Top ${percentile}%`,
-      label: "global"
-    }
+      label: "global",
+      iconBg: "bg-purple-500/20",
+      iconColor: "text-purple-400",
+      valueColor: "text-purple-300",
+    },
   ]
 
   return (
@@ -36,13 +39,14 @@ export function StatsRow({ focusTime, sessions, percentile }: StatsRowProps) {
       {stats.map((stat, index) => (
         <div
           key={index}
-          className="flex flex-col items-center bg-card/60 backdrop-blur-sm rounded-2xl px-4 py-3 min-w-[90px] border border-border/50"
+          className="flex flex-col items-center bg-card/60 backdrop-blur-sm rounded-2xl px-4 py-3.5 min-w-[100px] border border-border/40 animate-slide-up"
+          style={{ animationDelay: `${index * 0.08}s` }}
         >
-          <div className="flex items-center gap-1.5 text-primary mb-1">
+          <div className={`${stat.iconBg} ${stat.iconColor} rounded-full p-1.5 mb-2`}>
             {stat.icon}
-            <span className="font-bold text-foreground">{stat.value}</span>
           </div>
-          <span className="text-xs text-muted-foreground">{stat.label}</span>
+          <span className={`font-bold text-base ${stat.valueColor}`}>{stat.value}</span>
+          <span className="text-xs text-muted-foreground mt-0.5">{stat.label}</span>
         </div>
       ))}
     </div>

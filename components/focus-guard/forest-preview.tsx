@@ -24,16 +24,30 @@ export function ForestPreview() {
   }
 
   return (
-    <div className="bg-card/40 backdrop-blur-sm rounded-2xl p-4 border border-border/50">
+    <div className="bg-card/40 backdrop-blur-sm rounded-2xl p-4 border border-emerald-500/20" style={{ boxShadow: "0 4px 24px rgba(16,185,129,0.1)" }}>
       <div className="flex items-center justify-between mb-3">
-        <span className="text-sm font-medium text-foreground">This Week's Forest</span>
-        <span className="text-xs text-muted-foreground">6 trees grown</span>
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 bg-emerald-500/20 rounded-lg flex items-center justify-center text-sm">🌳</div>
+          <span className="text-sm font-semibold text-foreground">This Week's Forest</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground">6 trees</span>
+          <span className="text-xs bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 rounded-full px-2 py-0.5 font-medium">+42 XP</span>
+        </div>
       </div>
-      
+
       {/* Forest visualization */}
-      <div className="relative h-16 bg-gradient-to-b from-transparent via-emerald-950/20 to-emerald-950/40 rounded-xl overflow-hidden">
+      <div className="relative h-20 bg-gradient-to-b from-indigo-950/50 via-slate-900/40 to-emerald-950/50 rounded-xl overflow-hidden">
+        {/* Twinkling stars in sky */}
+        <div className="absolute top-[15%] left-[12%] w-0.5 h-0.5 bg-white/70 rounded-full animate-twinkle" />
+        <div className="absolute top-[22%] left-[38%] w-0.5 h-0.5 bg-white/60 rounded-full animate-twinkle" style={{ animationDelay: "0.6s" }} />
+        <div className="absolute top-[12%] right-[20%] w-0.5 h-0.5 bg-white/50 rounded-full animate-twinkle" style={{ animationDelay: "1.2s" }} />
+        <div className="absolute top-[28%] right-[8%]  w-0.5 h-0.5 bg-white/60 rounded-full animate-twinkle" style={{ animationDelay: "0.3s" }} />
+        <div className="absolute top-[18%] left-[62%] w-0.5 h-0.5 bg-white/40 rounded-full animate-twinkle" style={{ animationDelay: "1.8s" }} />
+        {/* Moon */}
+        <div className="absolute top-1.5 right-5 w-4 h-4 rounded-full border border-yellow-200/30 bg-yellow-100/8" />
         {/* Ground */}
-        <div className="absolute bottom-0 left-0 right-0 h-3 bg-gradient-to-t from-emerald-900/60 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-emerald-800/70 to-transparent" />
         
         {/* Trees */}
         <div className="absolute bottom-2 left-0 right-0 flex items-end justify-around px-4">
